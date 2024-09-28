@@ -20,7 +20,14 @@ jobs:
           echo "random_assignee=$RANDOM_ASSIGNEE" >> $GITHUB_ENV
 
       - name: Assign random contributor to the issue
-        uses: peter-evans/create-or-update-comment@v1
+        uses: actions/github-script@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          assignees: ${{ env.random_assignee }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              assignees: [process.env.random_assignee]
+            })
+
