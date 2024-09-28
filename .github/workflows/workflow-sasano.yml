@@ -1,6 +1,6 @@
 name: Update README with Art
 
-on: workflow_dispatch
+on: push
 
 jobs:
   update-readme:
