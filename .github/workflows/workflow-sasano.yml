@@ -1,8 +1,6 @@
 name: ysasano actions demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on:
-  push:
-    branches: [ "main" ]
+on: workflow_dispatch
 jobs:
   sasano-actions:
     runs-on: ubuntu-latest
