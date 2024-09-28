@@ -1,0 +1,26 @@
+name: Auto-Assign Issue
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up environment
+        run: |
+          # 貢献者のリストを指定
+          CONTRIBUTORS=("user1" "user2" "user3" "user4")
+
+          # ランダムに1人選ぶ
+          RANDOM_ASSIGNEE=${CONTRIBUTORS[$RANDOM % ${#CONTRIBUTORS[@]}]}
+
+          # GitHub環境変数にアサイン
+          echo "random_assignee=$RANDOM_ASSIGNEE" >> $GITHUB_ENV
+
+      - name: Assign random contributor to the issue
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          assignees: ${{ env.random_assignee }}
