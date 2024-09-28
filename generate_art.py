@@ -4,8 +4,7 @@ import random
 # アスキーアートの生成と幅制限
 def generate_ascii_art():
     words = ["Hello", "GitHub", "Push", "Action", "Fun", "Art"]
-    small_fonts = ["small", "mini", "thin", "tiny", "cybermedium", "fancy1"]
-    art_style = random.choice(small_fonts)
+    art_style = random.choice(["block", "bulbhead", "random"])  # スタイルをランダムに選択
     
     art = text2art(random.choice(words), art_style)
     
