@@ -9,7 +9,9 @@ def generate_ascii_art():
     art = text2art(random.choice(words), art_style)
     
     # 各行の幅を50文字以内に制限
+    limited_art += "```\n"
     limited_art = "\n".join([line[:50] for line in art.splitlines()])
+    limited_art += "\n```"
     return limited_art
 
 if __name__ == "__main__":
