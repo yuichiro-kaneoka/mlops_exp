@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+
+    steps:
+      # コードをチェックアウト
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # バージョン番号を決定 (必要に応じてバージョンの決定方法を変更)
+      - name: Set Release Version
+        id: get_version
+        run: |
+          version=$(git describe --tags --abbrev=0 || echo "v1.0.0")
+          echo "::set-output name=version::$version"
+
+      # リリース用にディレクトリをZIP化
+      - name: Zip directory
+        run: |
+          zip -r my_directory.zip ./path_to_your_directory
+
+      # GitHubリリースを作成
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get_version.outputs.version }}
+          release_name: Release ${{ steps.get_version.outputs.version }}
+          draft: false
+          prerelease: false
+
+      # ZIPファイルをリリースにアップロード
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./my_directory.zip  # 圧縮したZIPファイルのパス
+          asset_name: my_directory.zip    # アップロードするファイル名
+          asset_content_type: application/zip
