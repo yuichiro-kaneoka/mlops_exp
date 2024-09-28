@@ -22,10 +22,10 @@ jobs:
           version=$(git describe --tags --abbrev=0 || echo "v1.0.0")
           echo "::set-output name=version::$version"
 
-      # リリース用にディレクトリをZIP化
-      - name: Zip directory
+      # リポジトリ全体をZIP化
+      - name: Zip entire repository
         run: |
-          zip -r my_directory.zip ./path_to_your_directory
+          zip -r repository.zip .
 
       # GitHubリリースを作成
       - name: Create GitHub Release
@@ -44,6 +44,7 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./my_directory.zip  # 圧縮したZIPファイルのパス
-          asset_name: my_directory.zip    # アップロードするファイル名
+          asset_path: ./repository.zip  # 圧縮したリポジトリ全体のZIPファイルのパス
+          asset_name: repository.zip    # アップロードするファイル名
           asset_content_type: application/zip
+
